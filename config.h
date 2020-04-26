@@ -88,8 +88,8 @@ static const Rule rules[] = {
 	RULE(.type = WTYPE "SPLASH",  .isfloating = 1)
 	RULE(.class = "feh",             .tags = 0)
 	// RULE(.class = "kitty",           .isterminal = 1)
-	RULE(.title = "Discord Updater", .tags = 1 << 4, .isfloating = 1, .matchonce = 1, .floatpos = "50% 50%", .monitor = 1)
-	RULE(.class = "discord",         .tags = 1 << 4, .monitor = 1)
+	RULE(.title = "Discord Updater", .tags = 1 << 4, .isfloating = 1, .matchonce = 1, .floatpos = "50% 50%")
+	RULE(.class = "discord",         .tags = 1 << 4)
 	RULE(.class = "lutris",          .isfloating = 1)
 };
 
@@ -121,6 +121,13 @@ static const BarRule barrules[] = {
 	{ -1,       0,     BAR_ALIGN_RIGHT,  width_status2d,        draw_status2d,        click_statuscmd,    "status2d" },
 	{  0 ,      0,     BAR_ALIGN_RIGHT,  width_systray,         draw_systray,         click_systray,      "systray" },
 	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,        draw_wintitle,        click_wintitle,     "wintitle" },
+};
+
+static const MonitorRule monrules[] = {
+	/* monitor layout  mfact  nmaster  showbar  tagset */
+	{  1,      0,      -1,    -1,      -1,      1 << 5  },
+	{  2,      0,      -1,    -1,      -1,      1 << 4  },
+	{  -1,     0,      -1,    -1,      -1,      0       }, // default
 };
 
 static const Layout layouts[] = {

@@ -1,4 +1,4 @@
-/* See LICENSE file for copyright and license details.
+/* See LICENSE file for cpyright and license details.
  *
  * dynamic window manager is designed like any other X client as well. It is
  * driven through handling X events. In contrast to other X clients, a window
@@ -241,6 +241,15 @@ struct Clientlist {
 	Client *clients;
 	Client *stack;
 };
+
+typedef struct {
+	int monitor;
+	int layout;
+	float mfact;
+	int nmaster;
+	int showbar;
+	unsigned int tagset;
+} MonitorRule;
 
 /* function declarations */
 static void applyrules(Client *c);
@@ -898,6 +907,8 @@ createmon(void)
 
 	const BarRule *br;
 	Bar *bar;
+	unsigned int j;
+	const MonitorRule *mr;
 
 	/* bail out if the number of monitors exceeds the number of tags */
 	for (i=1, tm=mons; tm; i++, tm=tm->next);
@@ -926,9 +937,6 @@ createmon(void)
 	m->showbar = showbar;
 
 	for (mi = 0, mon = mons; mon; mon = mon->next, mi++); // monitor index
-	m->lt[0] = &layouts[0];
-	m->lt[1] = &layouts[1 % LENGTH(layouts)];
-	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
 
 	/* Derive the number of bars for this monitor based on bar rules */
 	for (n = -1, i = 0; i < LENGTH(barrules); i++) {
@@ -947,6 +955,24 @@ createmon(void)
 		istopbar = !istopbar;
 	}
 
+	for (j = 0; j < LENGTH(monrules); j++) {
+		mr = &monrules[j];
+		if ((mr->monitor == -1 || mr->monitor == mi)) {
+			m->lt[0] = &layouts[mr->layout];
+			m->lt[1] = &layouts[1 % LENGTH(layouts)];
+			strncpy(m->ltsymbol, layouts[mr->layout].symbol, sizeof m->ltsymbol);
+
+			if (mr->mfact > -1)
+				m->mfact = mr->mfact;
+			if (mr->nmaster > -1)
+				m->nmaster = mr->nmaster;
+			if (mr->showbar > -1)
+				m->showbar = mr->showbar;
+			if (mr->tagset)
+				m->tagset[m->seltags] = mr->tagset;
+			break;
+		}
+	}
 	return m;
 }
 

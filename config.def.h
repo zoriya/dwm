@@ -101,6 +101,12 @@ static const BarRule barrules[] = {
 	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status2d,        draw_status2d,        click_statuscmd,    "status2d" },
 	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_systray,         draw_systray,         click_systray,      "systray" },
 	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,        draw_wintitle,        click_wintitle,     "wintitle" },
+}
+
+static const MonitorRule monrules[] = {
+	/* monitor layout  mfact  nmaster  showbar  tagset */
+	{  -1,     0,      -1,    -1,      -1,      0       }, // default
+};
 
 /* layout(s) */
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
