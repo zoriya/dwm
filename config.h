@@ -11,6 +11,12 @@ static const int vertpadbar         = 10;        /* vertical padding for statusb
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
 
+static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
+static const unsigned int gappiv    = 20;       /* vert inner gap between windows */
+static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 30;       /* vert outer gap between windows and screen edge */
+static       int smartgaps          = 3;        /* gap size multiplier when there is only one window */
+
 static int floatposgrid_x           = 5;        /* float grid columns */
 static int floatposgrid_y           = 5;        /* float grid rows */
 
@@ -37,27 +43,27 @@ static char termcol13[] = "#cc00ff"; /* magenta */
 static char termcol14[] = "#00ffff"; /* cyan    */
 static char termcol15[] = "#ffffff"; /* white   */
 static char *termcolor[] = {
-  termcol0,
-  termcol1,
-  termcol2,
-  termcol3,
-  termcol4,
-  termcol5,
-  termcol6,
-  termcol7,
-  termcol8,
-  termcol9,
-  termcol10,
-  termcol11,
-  termcol12,
-  termcol13,
-  termcol14,
-  termcol15,
+	termcol0,
+	termcol1,
+	termcol2,
+	termcol3,
+	termcol4,
+	termcol5,
+	termcol6,
+	termcol7,
+	termcol8,
+	termcol9,
+	termcol10,
+	termcol11,
+	termcol12,
+	termcol13,
+	termcol14,
+	termcol15,
 };
 static char *colors[][3] = {
-       /*               fg          bg          border   */
-       [SchemeNorm] = { foreground, background, border    },
-       [SchemeSel]  = { background, accent,     accent    },
+	/*               fg          bg          border   */
+	[SchemeNorm] = { foreground, background, border    },
+	[SchemeSel]  = { background, accent,     accent    },
 };
 
 typedef struct {
@@ -93,12 +99,14 @@ static const Rule rules[] = {
 	RULE(.class = "lutris",          .isfloating = 1)
 };
 
-/* layout(s) */
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 static const int decorhints  = 1;    /* 1 means respect decoration hints */
+
+#define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
+#include "vanitygaps.c"
 
 #define STATUSBAR "dwmblocks"
 
@@ -130,11 +138,24 @@ static const MonitorRule monrules[] = {
 	{  -1,     0,      -1,    -1,      -1,      0       }, // default
 };
 
+/* layout(s) */
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+	{ "[@]",      spiral },
+	{ "[\\]",     dwindle },
+	{ "H[]",      deck },
+	{ "TTT",      bstack },
+	{ "===",      bstackhoriz },
+	{ "HHH",      grid },
+	{ "###",      nrowgrid },
+	{ "---",      horizgrid },
+	{ ":::",      gaplessgrid },
+	{ "|M|",      centeredmaster },
+	{ ">M>",      centeredfloatingmaster },
+	{ NULL,       NULL },
 };
 
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
