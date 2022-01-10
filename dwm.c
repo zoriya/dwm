@@ -297,7 +297,10 @@ static void zoom(const Arg *arg);
 #include "patch/include.h"
 /* variables */
 static const char broken[] = "broken";
-static char stext[256];
+static char stext[1024];
+static char rawstext[1024];
+static char estext[1024];
+static char rawestext[1024];
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh;               /* bar geometry */
@@ -600,7 +603,7 @@ cleanup(void)
 		cleanupmon(mons);
 	for (i = 0; i < CurLast; i++)
 		drw_cur_free(drw, cursor[i]);
-	for (i = 0; i < LENGTH(colors); i++)
+	for (i = 0; i < LENGTH(colors) + 1; i++)
 		free(scheme[i]);
 	XDestroyWindow(dpy, wmcheckwin);
 	drw_free(drw);
@@ -1792,7 +1795,8 @@ setup(void)
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	/* init appearance */
-	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
+	scheme = ecalloc(LENGTH(colors) + 1, sizeof(Clr *));
+	scheme[LENGTH(colors)] = drw_scm_create(drw, colors[0], 3);
 	for (i = 0; i < LENGTH(colors); i++)
 		scheme[i] = drw_scm_create(drw, colors[i], 3);
 	/* init bars */
@@ -2285,8 +2289,19 @@ void
 updatestatus(void)
 {
 	Monitor *m;
-	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
+	if (!gettextprop(root, XA_WM_NAME, rawstext, sizeof(rawstext))) {
 		strcpy(stext, "dwm-"VERSION);
+		estext[0] = '\0';
+	} else {
+		char *e = strchr(rawstext, statussep);
+		if (e) {
+			*e = '\0'; e++;
+			strncpy(rawestext, e, sizeof(estext) - 1);
+			copyvalidchars(estext, rawestext);
+		} else
+			estext[0] = '\0';
+		copyvalidchars(stext, rawstext);
+	}
 	for (m = mons; m; m = m->next)
 		drawbar(m);
 }
