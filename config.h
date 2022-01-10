@@ -11,6 +11,9 @@ static const int vertpadbar         = 10;        /* vertical padding for statusb
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
 
+static int floatposgrid_x           = 5;        /* float grid columns */
+static int floatposgrid_y           = 5;        /* float grid rows */
+
 static const char *fonts[]          = { "monospace:size=10" };
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -43,9 +46,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",	  NULL,			NULL,		0,				1,			 -1 },
-	{ "Firefox",  NULL,			NULL,		1 << 8,			0,			 -1 },
-	{ NULL,		  "kitty-sp",	NULL,		SPTAG(0),		1,			 -1 },
+	{ NULL,		  "kitty-sp",	NULL,		SPTAG(0),		1,		NULL,	 -1 },
 };
 
 /* layout(s) */
