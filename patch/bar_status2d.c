@@ -5,21 +5,9 @@ width_status2d(Bar *bar, BarWidthArg *a)
 }
 
 int
-width_status2d_es(Bar *bar, BarWidthArg *a)
-{
-	return status2dtextlength(rawestext);
-}
-
-int
 draw_status2d(Bar *bar, BarDrawArg *a)
 {
 	return drawstatusbar(a->x, rawstext);
-}
-
-int
-draw_status2d_es(Bar *bar, BarDrawArg *a)
-{
-	return drawstatusbar(a->x, rawestext);
 }
 
 int
