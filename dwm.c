@@ -1311,7 +1311,7 @@ losefullscreen(Client *sel, Client *next)
 {
 	if (!sel || !next)
 		return;
-	if (sel->isfullscreen && ISVISIBLE(sel) && sel->mon == next->mon && !next->isfloating)
+	if (sel->isfullscreen && ISVISIBLE(sel, selmon) && sel->mon == next->mon && !next->isfloating)
 		setfullscreen(sel, 0);
 }
 
