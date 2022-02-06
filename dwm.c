@@ -2108,15 +2108,6 @@ toggleview(const Arg *arg)
 		attachclients(selmon);
 		arrange(selmon);
 		focus(NULL);
-
-		unsigned int newtagset = selmon->tagset[selmon->seltags] ^ (arg->ui & TAGMASK);
-
-		if (newtagset) {
-			selmon->tagset[selmon->seltags] = newtagset;
-			attachclients(selmon);
-			arrange(selmon);
-			focus(NULL);
-		}
 	}
 }
 
