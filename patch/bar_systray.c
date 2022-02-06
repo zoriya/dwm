@@ -37,12 +37,12 @@ draw_systray(Bar *bar, BarDrawArg *a)
 		#if BAR_ALPHA_PATCH
 		wa.background_pixel = 0;
 		wa.colormap = cmap;
-		systray->win = XCreateWindow(dpy, root, bar->bx + a->x + lrpad / 2, bar->by, MAX(a->w + 40, 1), bar->bh, 0, depth,
+		systray->win = XCreateWindow(dpy, root, bar->bx + a->x + lrpad / 2, bar->by + vertpadbar / 2, MAX(a->w + 40, 1), drw->fonts->h, 0, depth,
 						InputOutput, visual,
 						CWOverrideRedirect|CWBorderPixel|CWBackPixel|CWColormap|CWEventMask, &wa); // CWBackPixmap
 		#else
 		wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
-		systray->win = XCreateSimpleWindow(dpy, root, bar->bx + a->x + lrpad / 2, bar->by, MIN(a->w, 1), bar->bh, 0, 0, scheme[SchemeNorm][ColBg].pixel);
+		systray->win = XCreateSimpleWindow(dpy, root, bar->bx + a->x + lrpad / 2, bar->by + vertpadbar / 2, MIN(a->w, 1), drw->fonts->h, 0, 0, scheme[SchemeNorm][ColBg].pixel);
 		XChangeWindowAttributes(dpy, systray->win, CWOverrideRedirect|CWBackPixel|CWBorderPixel|CWEventMask, &wa);
 		#endif // BAR_ALPHA_PATCH
 
@@ -88,7 +88,7 @@ draw_systray(Bar *bar, BarDrawArg *a)
 			i->mon = bar->mon;
 	}
 
-	XMoveResizeWindow(dpy, systray->win, bar->bx + a->x + lrpad / 2, (w ? bar->by : -bar->by), MAX(w, 1), bar->bh);
+	XMoveResizeWindow(dpy, systray->win, bar->bx + a->x + lrpad / 2, (w ? bar->by : -bar->by) + vertpadbar / 2, MAX(w, 1), drw->fonts->h);
 	return a->x + a->w;
 }
 
@@ -128,24 +128,24 @@ void
 updatesystrayicongeom(Client *i, int w, int h)
 {
 	if (i) {
-		i->h = bh;
+		i->h = drw->fonts->h;
 		if (w == h)
-			i->w = bh;
-		else if (h == bh)
+			i->w = drw->fonts->h;
+		else if (h == drw->fonts->h)
 			i->w = w;
 		else
-			i->w = (int) ((float)bh * ((float)w / (float)h));
+			i->w = (int) ((float)drw->fonts->h * ((float)w / (float)h));
 		applysizehints(i, &(i->x), &(i->y), &(i->w), &(i->h), False);
 		/* force icons into the systray dimensions if they don't want to */
-		if (i->h > bh) {
+		if (i->h > drw->fonts->h) {
 			if (i->w == i->h)
-				i->w = bh;
+				i->w = drw->fonts->h;
 			else
-				i->w = (int) ((float)bh * ((float)i->w / (float)i->h));
-			i->h = bh;
+				i->w = (int) ((float)drw->fonts->h * ((float)i->w / (float)i->h));
+			i->h = drw->fonts->h;
 		}
-		if (i->w > 2*bh)
-			i->w = bh;
+		if (i->w > 2*drw->fonts->h)
+			i->w = drw->fonts->h;
 	}
 }
 
