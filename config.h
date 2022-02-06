@@ -45,8 +45,8 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ NULL,		  "kitty-sp",	NULL,		SPTAG(0),		1,		NULL,	 -1 },
+	/* class      instance    title  type      tags mask     isfloating   monitor */
+	{ NULL,		  "kitty-sp",	NULL,	NULL,	SPTAG(0),		1,		NULL,	 -1 },
 };
 
 /* layout(s) */
