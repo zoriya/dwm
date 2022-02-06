@@ -138,6 +138,24 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+
+	{ MODKEY,                       XK_KP_Home,      floatpos,             {.v = "-26a -26a" } }, // ↖
+	{ MODKEY,                       XK_KP_Up,        floatpos,             {.v = "  0a -26a" } }, // ↑
+	{ MODKEY,                       XK_KP_Page_Up,   floatpos,             {.v = " 26a -26a" } }, // ↗
+	{ MODKEY,                       XK_KP_Left,      floatpos,             {.v = "-26a   0a" } }, // ←
+	{ MODKEY,                       XK_KP_Right,     floatpos,             {.v = " 26a   0a" } }, // →
+	{ MODKEY,                       XK_KP_End,       floatpos,             {.v = "-26a  26a" } }, // ↙
+	{ MODKEY,                       XK_KP_Down,      floatpos,             {.v = "  0a  26a" } }, // ↓
+	{ MODKEY,                       XK_KP_Page_Down, floatpos,             {.v = " 26a  26a" } }, // ↘
+	{ MODKEY|ShiftMask,             XK_KP_Home,      floatpos,             {.v = "-26w -26h" } }, // ↖
+	{ MODKEY|ShiftMask,             XK_KP_Up,        floatpos,             {.v = "  0w -26h" } }, // ↑
+	{ MODKEY|ShiftMask,             XK_KP_Page_Up,   floatpos,             {.v = " 26w -26h" } }, // ↗
+	{ MODKEY|ShiftMask,             XK_KP_Left,      floatpos,             {.v = "-26w   0h" } }, // ←
+	{ MODKEY|ShiftMask,             XK_KP_Begin,     floatpos,             {.v = " 50% 50% 90%  80%" } }, // ·
+	{ MODKEY|ShiftMask,             XK_KP_Right,     floatpos,             {.v = " 26w   0h" } }, // →
+	{ MODKEY|ShiftMask,             XK_KP_End,       floatpos,             {.v = "-26w  26h" } }, // ↙
+	{ MODKEY|ShiftMask,             XK_KP_Down,      floatpos,             {.v = "  0w  26h" } }, // ↓
+	{ MODKEY|ShiftMask,             XK_KP_Page_Down, floatpos,             {.v = " 26w  26h" } }, // ↘
 };
 
 /* button definitions */
