@@ -2476,6 +2476,7 @@ view(const Arg *arg)
 	attachclients(selmon);
 	arrange(selmon);
 	focus(NULL);
+	warp(selmon->sel);
 }
 
 void
