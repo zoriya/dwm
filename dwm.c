@@ -198,6 +198,7 @@ typedef struct {
 	int isfloating;
 	const char *floatpos;
 	int monitor;
+	int matchonce;
 } Rule;
 
 struct Clientlist {
@@ -395,6 +396,8 @@ applyrules(Client *c)
 				c->mon = m;
 			if (c->isfloating && r->floatpos)
 				setfloatpos(c, r->floatpos);
+			if (r->matchonce)
+				break;
 		}
 	}
 	if (ch.res_class)

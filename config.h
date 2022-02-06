@@ -40,13 +40,23 @@ static Sp scratchpads[] = {
 /* tagging */
 static const char *tags[] = { "一", "二", "三", "四", "五", "六", "七", "八", "九" };
 
+#define RULE(...) { .monitor = -1, __VA_ARGS__ },
+#define WTYPE "_NET_WM_WINDOW_TYPE_"
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title  type      tags mask     isfloating   monitor */
-	{ NULL,		  "kitty-sp",	NULL,	NULL,	SPTAG(0),		1,		NULL,	 -1 },
+	RULE(.instance = "kitty-sp", .tags = SPTAG(0), .isfloating = 1, .matchonce = 1, .floatpos = "50% 50% 90% 80%") // Not flagged as isterminal since we don't want the sp to swallow.
+	RULE(.type = WTYPE "DIALOG",  .isfloating = 1)
+	RULE(.type = WTYPE "UTILITY", .isfloating = 1)
+	RULE(.type = WTYPE "TOOLBAR", .isfloating = 1)
+	RULE(.type = WTYPE "SPLASH",  .isfloating = 1)
+	RULE(.class = "feh",             .tags = 0)
+	// RULE(.class = "kitty",           .isterminal = 1)
+	RULE(.title = "Discord Updater", .tags = 1 << 4, .isfloating = 1, .matchonce = 1, .floatpos = "50% 50%", .monitor = 1)
+	RULE(.class = "discord",         .tags = 1 << 4, .monitor = 1)
+	RULE(.class = "lutris",          .isfloating = 1)
 };
 
 /* layout(s) */
