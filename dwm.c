@@ -956,12 +956,11 @@ loadxrdb()
       xrdb = XrmGetStringDatabase(resm);
 
       if (xrdb != NULL) {
-        XRDB_LOAD_COLOR("dwm.normbordercolor", normbordercolor);
-        XRDB_LOAD_COLOR("dwm.normbgcolor", normbgcolor);
-        XRDB_LOAD_COLOR("dwm.normfgcolor", normfgcolor);
-        XRDB_LOAD_COLOR("dwm.selbordercolor", selbordercolor);
-        XRDB_LOAD_COLOR("dwm.selbgcolor", selbgcolor);
-        XRDB_LOAD_COLOR("dwm.selfgcolor", selfgcolor);
+        XRDB_LOAD_COLOR("foreground", foreground);
+        XRDB_LOAD_COLOR("background", background);
+        XRDB_LOAD_COLOR("accent", accent);
+        XRDB_LOAD_COLOR("secondary", secondary);
+        XRDB_LOAD_COLOR("border",  border);
         XRDB_LOAD_COLOR("color0",  termcol0);
         XRDB_LOAD_COLOR("color1",  termcol1);
         XRDB_LOAD_COLOR("color2",  termcol2);
@@ -2843,6 +2842,7 @@ view(const Arg *arg)
 			 * are connected */
 			if (newtagset & selmon->tagset[selmon->seltags])
 				return;
+			// TODO handle fullscreen clients if they do switch monitor (see https://raw.githubusercontent.com/bakkeby/patches/master/dwm/dwm-tagmonfixfs-6.3.diff for reference)
 			m->sel = selmon->sel;
 			m->seltags ^= 1;
 			m->tagset[m->seltags] = selmon->tagset[selmon->seltags];

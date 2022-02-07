@@ -15,12 +15,11 @@ static int floatposgrid_x           = 5;        /* float grid columns */
 static int floatposgrid_y           = 5;        /* float grid rows */
 
 static const char *fonts[]          = { "monospace:size=10" };
-static char normbgcolor[]           = "#222222";
-static char normbordercolor[]       = "#444444";
-static char normfgcolor[]           = "#bbbbbb";
-static char selfgcolor[]            = "#eeeeee";
-static char selbordercolor[]        = "#005577";
-static char selbgcolor[]            = "#005577";
+static char foreground[]           = "#222222";
+static char background[]       = "#444444";
+static char accent[]           = "#bbbbbb";
+static char secondary[]            = "#eeeeee";
+static char border[]            = "#eeeeee";
 static char termcol0[] = "#000000"; /* black   */
 static char termcol1[] = "#ff0000"; /* red     */
 static char termcol2[] = "#33ff00"; /* green   */
@@ -56,9 +55,9 @@ static char *termcolor[] = {
   termcol15,
 };
 static char *colors[][3] = {
-       /*               fg           bg           border   */
-       [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
-       [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
+       /*               fg          bg          border   */
+       [SchemeNorm] = { foreground, background, border    },
+       [SchemeSel]  = { background, accent,     accent    },
 };
 
 typedef struct {
