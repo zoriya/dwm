@@ -3110,6 +3110,7 @@ void
 view(const Arg *arg)
 {
 	Monitor *m;
+	Client *fs = NULL;
 	unsigned int newtagset = selmon->tagset[selmon->seltags ^ 1];
 	if ((arg->ui & TAGMASK) == selmon->tagset[selmon->seltags])
 		return;
@@ -3133,8 +3134,20 @@ view(const Arg *arg)
 	selmon->seltags ^= 1; /* toggle sel tagset */
 	if (arg->ui & TAGMASK)
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
+	for (Client *c = selmon->cl->clients; c; c = c->next) {
+		if (!c->isfullscreen)
+			continue;
+		c->isfullscreen = 0;
+		fs = fs ? NULL : c; // if two clients are fullscreen on the new view, disable fullscreen for every clients.
+	}
 	attachclients(selmon);
 	arrange(selmon);
+	if (fs) {
+		fs->isfullscreen = 1;
+		resizeclient(fs, fs->mon->mx, fs->mon->my, fs->mon->mw, fs->mon->mh);
+		XRaiseWindow(dpy, fs->win);
+
+	}
 	focus(NULL);
 	updatecurrentdesktop();
 	warp(selmon->sel);
