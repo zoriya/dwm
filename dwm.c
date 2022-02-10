@@ -63,28 +63,29 @@
 #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
-#define NUMTAGS					(LENGTH(tags) + LENGTH(scratchpads))
-#define TAGMASK     			((1 << NUMTAGS) - 1)
-#define SPTAG(i) 				((1 << LENGTH(tags)) << (i))
-#define SPTAGMASK   			(((1 << LENGTH(scratchpads))-1) << LENGTH(tags))
+#define NUMTAGS                 (LENGTH(tags) + LENGTH(scratchpads))
+#define TAGMASK                 ((1 << NUMTAGS) - 1)
+#define SPTAG(i)                ((1 << LENGTH(tags)) << (i))
+#define SPTAGMASK               (((1 << LENGTH(scratchpads))-1) << LENGTH(tags))
 #define TAGSLENGTH              (LENGTH(tags))
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
 #define TRUNC(X,A,B)            (MAX((A), MIN((X), (B))))
-#define XRDB_LOAD_COLOR(R,V)    if (XrmGetResource(xrdb, R, NULL, &type, &value) == True) { \
-                                  if (value.addr != NULL && strnlen(value.addr, 8) == 7 && value.addr[0] == '#') { \
-                                    int i = 1; \
-                                    for (; i <= 6; i++) { \
-                                      if (value.addr[i] < 48) break; \
-                                      if (value.addr[i] > 57 && value.addr[i] < 65) break; \
-                                      if (value.addr[i] > 70 && value.addr[i] < 97) break; \
-                                      if (value.addr[i] > 102) break; \
-                                    } \
-                                    if (i == 7) { \
-                                      strncpy(V, value.addr, 7); \
-                                      V[7] = '\0'; \
-                                    } \
-                                  } \
-                                }
+#define XRDB_LOAD_COLOR(R,V)    \
+if (XrmGetResource(xrdb, R, NULL, &type, &value) == True) { \
+	if (value.addr != NULL && strnlen(value.addr, 8) == 7 && value.addr[0] == '#') { \
+		int i = 1; \
+		for (; i <= 6; i++) { \
+			if (value.addr[i] < 48) break; \
+			if (value.addr[i] > 57 && value.addr[i] < 65) break; \
+			if (value.addr[i] > 70 && value.addr[i] < 97) break; \
+			if (value.addr[i] > 102) break; \
+		} \
+		if (i == 7) { \
+			strncpy(V, value.addr, 7); \
+			V[7] = '\0'; \
+		} \
+	} \
+}
 
 #define MWM_HINTS_FLAGS_FIELD       0
 #define MWM_HINTS_DECORATIONS_FIELD 2
@@ -966,47 +967,47 @@ destroynotify(XEvent *e)
 void
 loadxrdb()
 {
-  Display *display;
-  char * resm;
-  XrmDatabase xrdb;
-  char *type;
-  XrmValue value;
+	Display *display;
+	char * resm;
+	XrmDatabase xrdb;
+	char *type;
+	XrmValue value;
 
-  display = XOpenDisplay(NULL);
+	display = XOpenDisplay(NULL);
 
-  if (display != NULL) {
-    resm = XResourceManagerString(display);
+	if (display != NULL) {
+		resm = XResourceManagerString(display);
 
-    if (resm != NULL) {
-      xrdb = XrmGetStringDatabase(resm);
+		if (resm != NULL) {
+			xrdb = XrmGetStringDatabase(resm);
 
-      if (xrdb != NULL) {
-        XRDB_LOAD_COLOR("foreground", foreground);
-        XRDB_LOAD_COLOR("background", background);
-        XRDB_LOAD_COLOR("accent", accent);
-        XRDB_LOAD_COLOR("secondary", secondary);
-        XRDB_LOAD_COLOR("border",  border);
-        XRDB_LOAD_COLOR("color0",  termcol0);
-        XRDB_LOAD_COLOR("color1",  termcol1);
-        XRDB_LOAD_COLOR("color2",  termcol2);
-        XRDB_LOAD_COLOR("color3",  termcol3);
-        XRDB_LOAD_COLOR("color4",  termcol4);
-        XRDB_LOAD_COLOR("color5",  termcol5);
-        XRDB_LOAD_COLOR("color6",  termcol6);
-        XRDB_LOAD_COLOR("color7",  termcol7);
-        XRDB_LOAD_COLOR("color8",  termcol8);
-        XRDB_LOAD_COLOR("color9",  termcol9);
-        XRDB_LOAD_COLOR("color10", termcol10);
-        XRDB_LOAD_COLOR("color11", termcol11);
-        XRDB_LOAD_COLOR("color12", termcol12);
-        XRDB_LOAD_COLOR("color13", termcol13);
-        XRDB_LOAD_COLOR("color14", termcol14);
-        XRDB_LOAD_COLOR("color15", termcol15);
-      }
-    }
-  }
+			if (xrdb != NULL) {
+				XRDB_LOAD_COLOR("foreground", foreground);
+				XRDB_LOAD_COLOR("background", background);
+				XRDB_LOAD_COLOR("accent", accent);
+				XRDB_LOAD_COLOR("secondary", secondary);
+				XRDB_LOAD_COLOR("border",  border);
+				XRDB_LOAD_COLOR("color0",  termcol0);
+				XRDB_LOAD_COLOR("color1",  termcol1);
+				XRDB_LOAD_COLOR("color2",  termcol2);
+				XRDB_LOAD_COLOR("color3",  termcol3);
+				XRDB_LOAD_COLOR("color4",  termcol4);
+				XRDB_LOAD_COLOR("color5",  termcol5);
+				XRDB_LOAD_COLOR("color6",  termcol6);
+				XRDB_LOAD_COLOR("color7",  termcol7);
+				XRDB_LOAD_COLOR("color8",  termcol8);
+				XRDB_LOAD_COLOR("color9",  termcol9);
+				XRDB_LOAD_COLOR("color10", termcol10);
+				XRDB_LOAD_COLOR("color11", termcol11);
+				XRDB_LOAD_COLOR("color12", termcol12);
+				XRDB_LOAD_COLOR("color13", termcol13);
+				XRDB_LOAD_COLOR("color14", termcol14);
+				XRDB_LOAD_COLOR("color15", termcol15);
+			}
+		}
+	}
 
-  XCloseDisplay(display);
+	XCloseDisplay(display);
 }
 
 void
@@ -2463,12 +2464,12 @@ setup(void)
 	grabkeys();
 	focus(NULL);
 }
+
 void
 setviewport(void){
 	long data[] = { 0, 0 };
 	XChangeProperty(dpy, root, netatom[NetDesktopViewport], XA_CARDINAL, 32, PropModeReplace, (unsigned char *)data, 2);
 }
-
 
 void
 seturgent(Client *c, int urg)
@@ -2613,7 +2614,7 @@ tile(Monitor *m)
 		mw = m->nmaster ? m->ww * m->mfact : 0;
 	else
 		mw = m->ww;
-	for (i = my = ty = 0, c = nexttiled(m->cl->clients, m); c; c = nexttiled(c->next, m), i++)
+	for (i = my = ty = 0, c = nexttiled(m->cl->clients, m); c; c = nexttiled(c->next, m), i++) {
 		if (i < m->nmaster) {
 			h = (m->wh - my) / (MIN(n, m->nmaster) - i);
 			resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0);
@@ -2625,6 +2626,7 @@ tile(Monitor *m)
 			if (ty + HEIGHT(c) < m->wh)
 				ty += HEIGHT(c);
 		}
+	}
 }
 
 void
@@ -2654,10 +2656,10 @@ togglefloating(const Arg *arg)
 
 void
 togglefullscreen(const Arg *arg) {
-    if (!selmon->sel)
-        return;
+	if (!selmon->sel)
+		return;
 
-    setfullscreen(selmon->sel, !selmon->sel->isfullscreen);
+	setfullscreen(selmon->sel, !selmon->sel->isfullscreen);
 }
 
 void
@@ -3273,12 +3275,12 @@ xerrorstart(Display *dpy, XErrorEvent *ee)
 void
 xrdb(const Arg *arg)
 {
-  loadxrdb();
-  int i;
-  for (i = 0; i < LENGTH(colors); i++)
-                scheme[i] = drw_scm_create(drw, colors[i], 3);
-  focus(NULL);
-  arrange(NULL);
+	loadxrdb();
+	int i;
+	for (i = 0; i < LENGTH(colors); i++)
+		scheme[i] = drw_scm_create(drw, colors[i], 3);
+	focus(NULL);
+	arrange(NULL);
 }
 
 void
@@ -3307,8 +3309,8 @@ main(int argc, char *argv[])
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("dwm: cannot open display");
 	checkotherwm();
-        XrmInitialize();
-        loadxrdb();
+	XrmInitialize();
+	loadxrdb();
 	setup();
 #ifdef __OpenBSD__
 	if (pledge("stdio rpath proc exec", NULL) == -1)
