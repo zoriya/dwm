@@ -347,6 +347,7 @@ static void updatestatus(void);
 static void updatetitle(Client *c);
 static void updatewindowtype(Client *c);
 static void updatewmhints(Client *c);
+static void focusorview(const Arg *arg);
 static void view(const Arg *arg);
 static void warp(const Client *c);
 static Client *wintoclient(Window w);
@@ -3104,6 +3105,23 @@ updatewmhints(Client *c)
 			c->neverfocus = 0;
 		XFree(wmh);
 	}
+}
+
+void
+focusorview(const Arg *arg)
+{
+	Monitor *m;
+
+	for (m = mons; m; m = m->next) {
+		if (m->tagset[m->seltags] & arg->ui) {
+			unfocus(selmon->sel, 0);
+			selmon = m;
+			focus(NULL);
+			warp(selmon->sel);
+			return;
+		}
+	}
+	view(arg);
 }
 
 void
