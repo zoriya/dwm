@@ -10,6 +10,7 @@ static const int horizpadbar        = 2;        /* horizontal padding for status
 static const int vertpadbar         = 10;        /* vertical padding for statusbar */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
+static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 
 static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 20;       /* vert inner gap between windows */
@@ -93,7 +94,7 @@ static const Rule rules[] = {
 	RULE(.type = WTYPE "TOOLBAR", .isfloating = 1)
 	RULE(.type = WTYPE "SPLASH",  .isfloating = 1)
 	RULE(.class = "feh",             .tags = 0)
-	// RULE(.class = "kitty",           .isterminal = 1)
+	RULE(.class = "kitty",           .isterminal = 1)
 	RULE(.title = "Discord Updater", .tags = 1 << 4, .isfloating = 1, .matchonce = 1, .floatpos = "50% 50%")
 	RULE(.class = "discord",         .tags = 1 << 4)
 	RULE(.class = "lutris",          .isfloating = 1)
