@@ -2606,6 +2606,7 @@ tag(const Arg *arg)
 					return;
 				selmon->sel->tags = newtags;
 				selmon->sel->mon = m;
+				m->sel = selmon->sel;
 				arrange(m);
 				break;
 			}
@@ -2742,6 +2743,7 @@ toggleview(const Arg *arg)
 			if (!m->tagset[m->seltags]) {
 				m->tagset[m->seltags] |= findfirstunusedtag();
 			}
+			m->sel = NULL;
 			attachclients(m);
 			arrange(m);
 		}
