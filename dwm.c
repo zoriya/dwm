@@ -1995,7 +1995,8 @@ propertynotify(XEvent *e)
 }
 
 void
-pushstack(const Arg *arg) {
+pushstack(const Arg *arg)
+{
 	int i = stackpos(arg);
 	Client *sel = selmon->sel, *c, *p;
 
@@ -2006,10 +2007,15 @@ pushstack(const Arg *arg) {
 		attach(sel);
 	}
 	else {
-		for(p = NULL, c = selmon->cl->clients; c; p = c, c = c->next)
-			if(!(i -= (ISVISIBLE(c, selmon) && c != sel)))
-				break;
-		c = c ? c : p;
+		for(p = NULL, c = selmon->cl->clients; c && i; c = c->next) {
+			if (!ISVISIBLE(c, selmon))
+				continue;
+			i -= c != sel;
+			p = c;
+		}
+		c = (c && ISVISIBLE(c, selmon)) ? c : p;
+		if (c == sel)
+			return;
 		detach(sel);
 		sel->next = c->next;
 		c->next = sel;
