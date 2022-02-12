@@ -2709,6 +2709,22 @@ toggletag(const Arg *arg)
 	updatecurrentdesktop();
 }
 
+int
+findfirstunusedtag(void)
+{
+	Monitor *m;
+	int occupied = 0;
+
+	for (m = mons; m; m = m->next)
+		occupied |= m->tagset[m->seltags];
+
+	for (int i = 1; i < occupied; i <<= 1) {
+		if ((i & occupied) == 0)
+			return i;
+	}
+	return 0;
+}
+
 void
 toggleview(const Arg *arg)
 {
@@ -2716,9 +2732,16 @@ toggleview(const Arg *arg)
 	unsigned int newtagset = selmon->tagset[selmon->seltags] ^ (arg->ui & TAGMASK);
 
 	/* prevent displaying the same tags on multiple monitors */
-	for(m = mons; m; m = m->next)
-		if(m != selmon && newtagset & m->tagset[m->seltags])
-			return;
+	for(m = mons; m; m = m->next) {
+		if(m != selmon && newtagset & m->tagset[m->seltags]) {
+			m->tagset[m->seltags] = m->tagset[m->seltags] ^ (arg->ui & TAGMASK);
+			if (!m->tagset[m->seltags]) {
+				m->tagset[m->seltags] |= findfirstunusedtag();
+			}
+			attachclients(m);
+			arrange(m);
+		}
+	}
 	selmon->tagset[selmon->seltags] = newtagset;
 	attachclients(selmon);
 	arrange(selmon);
@@ -3143,7 +3166,6 @@ view(const Arg *arg)
 			 * are connected */
 			if (newtagset & selmon->tagset[selmon->seltags])
 				return;
-			// TODO handle fullscreen clients if they do switch monitor (see https://raw.githubusercontent.com/bakkeby/patches/master/dwm/dwm-tagmonfixfs-6.3.diff for reference)
 			m->sel = selmon->sel;
 			m->seltags ^= 1;
 			m->tagset[m->seltags] = selmon->tagset[selmon->seltags];
