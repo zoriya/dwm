@@ -110,6 +110,7 @@ static const int decorhints  = 1;    /* 1 means respect decoration hints */
 #include "vanitygaps.c"
 
 #define STATUSBAR "dwmblocks"
+#define TABBED "tabbed"
 
 /* Bar rules allow you to configure what is shown where on the bar, as well as
  * introducing your own bar modules.

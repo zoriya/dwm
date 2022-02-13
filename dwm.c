@@ -20,6 +20,7 @@
  *
  * To understand everything else, start reading main().
  */
+#include <X11/X.h>
 #include <errno.h>
 #include <locale.h>
 #include <signal.h>
@@ -629,28 +630,63 @@ attachstack(Client *c)
 void
 swallow(Client *p, Client *c)
 {
+	Monitor *m = p->mon;
+	Window pw = p->win, cw = c->win, tw;
+	int fd[2];
 
 	if (c->noswallow || c->isterminal)
 		return;
 	if (c->noswallow && !swallowfloating && c->isfloating)
 		return;
 
-	detach(c);
-	detachstack(c);
+	fputs("swallowing", stderr);
+	pipe(fd);
+	// TODO check if fork failed
+	if (fork() == 0) {
+		if (dpy)
+			close(ConnectionNumber(dpy));
+		setsid();
+		dup2(fd[1], 1);
+		fputs("Spawning tabbed", stderr);
+		execlp(TABBED, TABBED, NULL);
+		perror("dwm: tabbed exec: ");
+		exit(0);
+	}
 
-	setclientstate(c, WithdrawnState);
-	XUnmapWindow(dpy, p->win);
+	FILE *file = fdopen(fd[0], "r");
+	if  (!file) {
+		// TODO exit in case of failure
+		return;
+	}
+	fputs("reading pipe...", stderr);
+	// TODO this fscanf never returns
+	// THIS IS A DEADLOCK, tabbed waited to be parrented to retrieve a xid and we wait for this xid
+	fscanf(file, "%lx\n", &tw);
+	fprintf(stderr, "read ended %lx\n", tw);
 
-	p->swallowing = c;
-	c->mon = p->mon;
+	unmanage(c, 0);
+	unmanage(p, 0);
 
-	Window w = p->win;
-	p->win = c->win;
-	c->win = w;
-	updatetitle(p);
-	XMoveResizeWindow(dpy, p->win, p->x, p->y, p->w, p->h);
-	arrange(p->mon);
-	configure(p);
+	XReparentWindow(dpy, cw, tw, p->x, p->y);
+	XReparentWindow(dpy, pw, tw, p->x, p->y);
+	arrange(m);
+
+	// detach(c);
+	// detachstack(c);
+
+	// setclientstate(c, WithdrawnState);
+	// XUnmapWindow(dpy, p->win);
+
+	// p->swallowing = c;
+	// c->mon = p->mon;
+
+	// Window w = p->win;
+	// p->win = c->win;
+	// c->win = w;
+	// updatetitle(p);
+	// XMoveResizeWindow(dpy, p->win, p->x, p->y, p->w, p->h);
+	// arrange(p->mon);
+	// configure(p);
 	updateclientlist();
 }
 
@@ -2849,22 +2885,22 @@ unfocus(Client *c, int setfocus)
 void
 unmanage(Client *c, int destroyed)
 {
-	Monitor *m = c->mon;
+	// Monitor *m = c->mon;
 	XWindowChanges wc;
 
-	if (c->swallowing) {
-		unswallow(c);
-		return;
-	}
+	// if (c->swallowing) {
+	// 	unswallow(c);
+	// 	return;
+	// }
 
-	Client *s = swallowingclient(c->win);
-	if (s) {
-		free(s->swallowing);
-		s->swallowing = NULL;
-		arrange(m);
-		focus(NULL);
-		return;
-	}
+	// Client *s = swallowingclient(c->win);
+	// if (s) {
+	// 	free(s->swallowing);
+	// 	s->swallowing = NULL;
+	// 	arrange(m);
+	// 	focus(NULL);
+	// 	return;
+	// }
 
 	detach(c);
 	detachstack(c);
@@ -2881,11 +2917,11 @@ unmanage(Client *c, int destroyed)
 	}
 	free(c);
 
-	if (!s) {
-		arrange(m);
-		focus(NULL);
-		updateclientlist();
-	}
+	// if (!s) {
+	// 	arrange(m);
+	// 	focus(NULL);
+	// 	updateclientlist();
+	// }
 }
 
 void
