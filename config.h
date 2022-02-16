@@ -65,6 +65,7 @@ static char *colors[][3] = {
 	/*               fg          bg          border   */
 	[SchemeNorm] = { foreground, background, border    },
 	[SchemeSel]  = { background, accent,     accent    },
+	[SchemeUrg]  = { background, secondary,  secondary },
 };
 
 typedef struct {

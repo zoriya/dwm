@@ -18,11 +18,11 @@ width_tags(Bar *bar, BarWidthArg *a)
 int
 draw_tags(Bar *bar, BarDrawArg *a)
 {
-	int invert;
 	int w, x = a->x;
 	unsigned int i, occ = 0, urg = 0;
 	Client *c;
 	Monitor *m = bar->mon;
+	int s;
 
 	for (c = m->cl->clients; c; c = c->next) {
 		occ |= c->tags == 255 ? 0 : c->tags;
@@ -33,10 +33,15 @@ draw_tags(Bar *bar, BarDrawArg *a)
 	for (i = 0; i < LENGTH(tags); i++) {
 		if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
 			continue;
-		invert = urg & 1 << i;
+		if (m->tagset[m->seltags] & 1 << i)
+			s = SchemeSel;
+		else if (urg & 1 << i)
+			s = SchemeUrg;
+		else
+			s = SchemeNorm;
 		w = TEXTW(tags[i]);
-		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], invert);
+		drw_setscheme(drw, scheme[s]);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], 0);
 		x += w;
 	}
 

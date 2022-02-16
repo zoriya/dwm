@@ -102,7 +102,7 @@ if (XrmGetResource(xrdb, R, NULL, &type, &value) == True) { \
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel }; /* color schemes */
+enum { SchemeNorm, SchemeSel, SchemeUrg }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation,
@@ -1707,7 +1707,7 @@ manage(Window w, XWindowAttributes *wa)
 
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
-	XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
+	XSetWindowBorder(dpy, w, scheme[c->isurgent ? SchemeUrg : SchemeNorm][ColBorder].pixel);
 	configure(c); /* propagates border_width, if size doesn't change */
 	updatewindowtype(c);
 	updatesizehints(c);
@@ -2588,6 +2588,8 @@ seturgent(Client *c, int urg)
 	XWMHints *wmh;
 
 	c->isurgent = urg;
+	if (selmon->sel != c)
+		XSetWindowBorder(dpy, c->win, scheme[c->isurgent ? SchemeUrg : SchemeNorm][ColBorder].pixel);
 	if (!(wmh = XGetWMHints(dpy, c->win)))
 		return;
 	wmh->flags = urg ? (wmh->flags | XUrgencyHint) : (wmh->flags & ~XUrgencyHint);
@@ -2839,7 +2841,7 @@ unfocus(Client *c, int setfocus)
 	if (!c)
 		return;
 	grabbuttons(c, 0);
-	XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
+	XSetWindowBorder(dpy, c->win, scheme[c->isurgent ? SchemeUrg : SchemeNorm][ColBorder].pixel);
 	if (setfocus) {
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
@@ -3223,8 +3225,10 @@ updatewmhints(Client *c)
 		if (c == selmon->sel && wmh->flags & XUrgencyHint) {
 			wmh->flags &= ~XUrgencyHint;
 			XSetWMHints(dpy, c->win, wmh);
-		} else
+		} else {
 			c->isurgent = (wmh->flags & XUrgencyHint) ? 1 : 0;
+			XSetWindowBorder(dpy, c->win, scheme[c->isurgent ? SchemeUrg : (c->mon->sel == c ? SchemeSel : SchemeNorm)][ColBorder].pixel);
+		}
 		if (wmh->flags & InputHint)
 			c->neverfocus = !wmh->input;
 		else
