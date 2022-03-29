@@ -3282,7 +3282,7 @@ view(const Arg *arg)
 	if (arg->ui & TAGMASK)
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
 	for (Client *c = selmon->cl->clients; c; c = c->next) {
-		if (!c->isfullscreen)
+		if (!(c->isfullscreen && c->tags & newtagset))
 			continue;
 		c->isfullscreen = 0;
 		fs = fs ? NULL : c; // if two clients are fullscreen on the new view, disable fullscreen for every clients.
