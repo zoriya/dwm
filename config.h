@@ -12,11 +12,16 @@ static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 
-static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
-static const unsigned int gappiv    = 20;       /* vert inner gap between windows */
-static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 30;       /* vert outer gap between windows and screen edge */
-static       int smartgaps          = 3;        /* gap size multiplier when there is only one window */
+static const unsigned int gappih    = 5;       /* horiz inner gap between windows */
+static const unsigned int gappiv    = 5;       /* vert inner gap between windows */
+static const unsigned int gappoh    = 5;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 5;       /* vert outer gap between windows and screen edge */
+static       int smartgaps          = 0;        /* gap size multiplier when there is only one window */
+// static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
+// static const unsigned int gappiv    = 20;       /* vert inner gap between windows */
+// static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
+// static const unsigned int gappov    = 30;       /* vert outer gap between windows and screen edge */
+// static       int smartgaps          = 3;        /* gap size multiplier when there is only one window */
 
 static int floatposgrid_x           = 5;        /* float grid columns */
 static int floatposgrid_y           = 5;        /* float grid rows */
@@ -174,11 +179,7 @@ static const Layout layouts[] = {
 #define STACKKEYS(MOD,ACTION) \
 	{ MOD, XK_j,     ACTION##stack, {.i = INC(+1) } }, \
 	{ MOD, XK_k,     ACTION##stack, {.i = INC(-1) } }, \
-	{ MOD, XK_Tab,   ACTION##stack, {.i = PREVSEL } }, \
-	{ MOD, XK_a,     ACTION##stack, {.i = 0 } }, \
-	{ MOD, XK_s,     ACTION##stack, {.i = 1 } }, \
-	{ MOD, XK_d,     ACTION##stack, {.i = 2 } }, \
-	{ MOD, XK_g,     ACTION##stack, {.i = -1 } },
+	{ MOD, XK_Tab,   ACTION##stack, {.i = PREVSEL } },
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -196,7 +197,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_semicolon,     setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,                       XK_d,      setlayout,      {.v = &layouts[3]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_f,      togglefullscreen, {0} },
@@ -218,24 +219,6 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 	{ MODKEY,                       XK_F5,     xrdb,           {.v = NULL } },
-
-	{ MODKEY,                       XK_KP_Home,      floatpos,             {.v = "-26a -26a" } }, // ↖
-	{ MODKEY,                       XK_KP_Up,        floatpos,             {.v = "  0a -26a" } }, // ↑
-	{ MODKEY,                       XK_KP_Page_Up,   floatpos,             {.v = " 26a -26a" } }, // ↗
-	{ MODKEY,                       XK_KP_Left,      floatpos,             {.v = "-26a   0a" } }, // ←
-	{ MODKEY,                       XK_KP_Right,     floatpos,             {.v = " 26a   0a" } }, // →
-	{ MODKEY,                       XK_KP_End,       floatpos,             {.v = "-26a  26a" } }, // ↙
-	{ MODKEY,                       XK_KP_Down,      floatpos,             {.v = "  0a  26a" } }, // ↓
-	{ MODKEY,                       XK_KP_Page_Down, floatpos,             {.v = " 26a  26a" } }, // ↘
-	{ MODKEY|ShiftMask,             XK_KP_Home,      floatpos,             {.v = "-26w -26h" } }, // ↖
-	{ MODKEY|ShiftMask,             XK_KP_Up,        floatpos,             {.v = "  0w -26h" } }, // ↑
-	{ MODKEY|ShiftMask,             XK_KP_Page_Up,   floatpos,             {.v = " 26w -26h" } }, // ↗
-	{ MODKEY|ShiftMask,             XK_KP_Left,      floatpos,             {.v = "-26w   0h" } }, // ←
-	{ MODKEY|ShiftMask,             XK_KP_Begin,     floatpos,             {.v = " 50% 50% 90%  80%" } }, // ·
-	{ MODKEY|ShiftMask,             XK_KP_Right,     floatpos,             {.v = " 26w   0h" } }, // →
-	{ MODKEY|ShiftMask,             XK_KP_End,       floatpos,             {.v = "-26w  26h" } }, // ↙
-	{ MODKEY|ShiftMask,             XK_KP_Down,      floatpos,             {.v = "  0w  26h" } }, // ↓
-	{ MODKEY|ShiftMask,             XK_KP_Page_Down, floatpos,             {.v = " 26w  26h" } }, // ↘
 };
 
 /* button definitions */
