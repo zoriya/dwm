@@ -999,10 +999,12 @@ createmon(void)
 	/* reassign all tags to monitors since there's currently no free tag for the
 	 * new monitor */
 	if (i >= LENGTH(tags))
+	{
 		for (i=0, tm=mons; tm; tm=tm->next, i++) {
 			tm->seltags ^= 1;
 			tm->tagset[tm->seltags] = (1<<i) & TAGMASK;
 		}
+	}
 	m = ecalloc(1, sizeof(Monitor));
 	m->cl = cl;
 	m->tagset[0] = m->tagset[1] = (1<<i) & TAGMASK;
@@ -1033,7 +1035,7 @@ createmon(void)
 		mr = &monrules[j];
 		if ((mr->monitor == -1 || mr->monitor == mi)) {
 			m->lt[0] = &layouts[mr->layout];
-			m->lt[1] = &layouts[1 % LENGTH(layouts)];
+			m->lt[1] = &layouts[2 % LENGTH(layouts)]; // The second layout is monocle by default.
 			strncpy(m->ltsymbol, layouts[mr->layout].symbol, sizeof m->ltsymbol);
 
 			if (mr->mfact > -1)

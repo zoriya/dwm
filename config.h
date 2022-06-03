@@ -100,7 +100,7 @@ static const Rule rules[] = {
 	RULE(.type = WTYPE "TOOLBAR", .isfloating = 1)
 	RULE(.type = WTYPE "SPLASH",  .isfloating = 1)
 	RULE(.class = "feh",             .tags = 0)
-	RULE(.class = "kitty",           .isterminal = 1)
+	RULE(.class = "kitty",           .isterminal = 0) // isterminal at 0 to disable swallowing
 	RULE(.title = "Discord Updater", .tags = 1 << 4, .isfloating = 1, .matchonce = 1, .floatpos = "50% 50%")
 	RULE(.class = "discord",         .tags = 1 << 4)
 	RULE(.class = "lutris",          .isfloating = 1)
@@ -140,8 +140,9 @@ static const BarRule barrules[] = {
 
 static const MonitorRule monrules[] = {
 	/* monitor layout  mfact  nmaster  showbar  tagset */
-	{  1,      2,      -1,    -1,      -1,      1 << 5  },
-	{  2,      0,      -1,    -1,      -1,      1 << 4  },
+	{  0,      0,      -1,    -1,      -1,      1 << 4  },
+	{  1,      0,      -1,    -1,      -1,      1 << 3  },
+	{  2,      0,      -1,    -1,      -1,      1 << 6  },
 	{  -1,     0,      -1,    -1,      -1,      0       }, // default
 };
 

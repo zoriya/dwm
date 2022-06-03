@@ -87,7 +87,6 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-<<<<<<< HEAD
 };
 
 /* Bar rules allow you to configure what is shown where on the bar, as well as
@@ -114,17 +113,11 @@ static const BarRule barrules[] = {
 static const MonitorRule monrules[] = {
 	/* monitor layout  mfact  nmaster  showbar  tagset */
 	{  -1,     0,      -1,    -1,      -1,      0       }, // default
-||||||| constructed merge base
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
-=======
 	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
 	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
 	{ "Firefox", NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
 	{ "St",      NULL,     NULL,           0,         0,          1,           0,        -1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
->>>>>>> fix swallow for openbsd
 };
 
 /* layout(s) */
