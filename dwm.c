@@ -472,14 +472,12 @@ applyrules(Client *c)
 			c->isfloating = r->isfloating;
 			c->tags |= r->tags;
 			for (m = mons; m && (m->tagset[m->seltags] & c->tags) == 0; m = m->next);
+			if (m)
+				c->mon = m;
 			if ((r->tags & SPTAGMASK) && r->isfloating) {
 				c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
 				c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
 			}
-
-			for (m = mons; m && m->num != r->monitor; m = m->next);
-			if (m)
-				c->mon = m;
 			if (c->isfloating && r->floatpos)
 				setfloatpos(c, r->floatpos);
 			if (r->matchonce)
