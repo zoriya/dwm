@@ -138,7 +138,7 @@ static const BarRule barrules[] = {
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_tags,            draw_tags,            click_tags,         "tags" },
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,        draw_ltsymbol,        click_ltsymbol,     "layout" },
 	{ -1,       0,     BAR_ALIGN_RIGHT,  width_status2d,        draw_status2d,        click_statuscmd,    "status2d" },
-	{  0 ,      0,     BAR_ALIGN_RIGHT,  width_systray,         draw_systray,         click_systray,      "systray" },
+	{  1 ,      0,     BAR_ALIGN_RIGHT,  width_systray,         draw_systray,         click_systray,      "systray" },
 	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,        draw_wintitle,        click_wintitle,     "wintitle" },
 };
 
