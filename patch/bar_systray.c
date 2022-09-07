@@ -6,10 +6,16 @@ width_systray(Bar *bar, BarWidthArg *a)
 {
 	unsigned int w = 0;
 	Client *i;
+	Atom flags;
+
 	if (!systray)
 		return 1;
-	if (showsystray)
-		for (i = systray->icons; i; w += i->w + systrayspacing, i = i->next);
+	if (showsystray) {
+		for (i = systray->icons; i; i = i->next) {
+			if (!(flags = getatomprop(i, netatom[NetWmStateSkipTaskbar])))
+				w += i->w + systrayspacing;
+		}
+	}
 	return w ? w + lrpad - systrayspacing : 0;
 }
 
@@ -25,6 +31,7 @@ draw_systray(Bar *bar, BarDrawArg *a)
 	XSetWindowAttributes wa;
 	Client *i;
 	unsigned int w;
+	Atom flags;
 
 	if (!systray) {
 		/* init systray */
@@ -72,6 +79,8 @@ draw_systray(Bar *bar, BarDrawArg *a)
 
 	drw_setscheme(drw, scheme[SchemeNorm]);
 	for (w = 0, i = systray->icons; i; i = i->next) {
+		if ((flags = getatomprop(i, netatom[NetWmStateSkipTaskbar])))
+			continue;
 		#if BAR_ALPHA_PATCH
 		wa.background_pixel = 0;
 		#else
